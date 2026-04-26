@@ -1,16 +1,21 @@
 package com.airtribe.libraryManagementSystem.ui;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import com.airtribe.libraryManagementSystem.entity.Book;
 import com.airtribe.libraryManagementSystem.entity.Genre;
 import com.airtribe.libraryManagementSystem.entity.Library;
 import com.airtribe.libraryManagementSystem.entity.Patron;
 import com.airtribe.libraryManagementSystem.service.BookService;
+import com.airtribe.libraryManagementSystem.service.BookTransferService;
 import com.airtribe.libraryManagementSystem.service.DataLoadService;
 import com.airtribe.libraryManagementSystem.service.LendingService;
 import com.airtribe.libraryManagementSystem.service.LibraryService;
 import com.airtribe.libraryManagementSystem.util.ApplicationConstants;
+import com.airtribe.libraryManagementSystem.util.LendingStatus;
 
 public class Main {
 
@@ -50,6 +55,12 @@ public class Main {
 				case 4:
 					getLendingHistory();
 					break;
+				case 5:
+					transferBook();
+						break;
+				case 7:
+					recommendBooks();
+					break;
 				}
 			}
 
@@ -64,16 +75,40 @@ public class Main {
 	public static void recommendBooks() {
 		Scanner scanner = new Scanner(System.in);
 		BookService bookServive = new BookService();
+		DataLoadService dataLoadService = new DataLoadService();
+		Library library = new Library();
+		System.out.println("Select Library of the member : 1. MindSpace Reading Corner 2. ReadersVille");
+		int selectLibrary = scanner.nextInt();
+
+		if(selectLibrary==1 ) {
+			library = dataLoadService.libraries.stream().filter(l -> l.getLibraryName().equalsIgnoreCase(ApplicationConstants.MINDSPACE_READING_CORNER)).findFirst()
+					.orElse(null);
+		}else if(selectLibrary == 2) {
+			library = dataLoadService.libraries.stream().filter(l -> l.getLibraryName().equalsIgnoreCase(ApplicationConstants.READERS_VILLE)).findFirst()
+					.orElse(null);
+		}
 		System.out.println("Enter your membershipId");
 		int id = scanner.nextInt();
+		Map<Genre, Long> genreCount = library.getMembers().stream()
+		.filter(m -> m.getMembershipId() == id).findFirst().orElse(null).getBookHistory()..flatMap(List::stream)                 // all books in one stream
+	    .collect(Collectors.groupingBy(
+	            Book::getGenre, 
+	            Collectors.counting()
+	        ));
 
-
+		Genre maxGenre = genreCount.entrySet().stream()
+			    .max(Map.Entry.comparingByValue())
+			    .map(Map.Entry::getKey)
+			    .orElse(null);
+		List<Book> bookRecommendations = DataLoadService.booksByGenre.get(maxGenre);
+		bookRecommendations.stream().forEach(System.out::println);
+		
 	}
 
 	public static void manageBooks() {
 		Scanner scanner = new Scanner(System.in);
 		DataLoadService dataLoadService = new DataLoadService();
-		Library library = null;
+		Library library = new Library();
 		LibraryService libraryService  = new LibraryService();
 		while (true) {
 			System.out.println("\n--- Manage Books ---");
@@ -232,7 +267,7 @@ public class Main {
 		DataLoadService dataLoadService = new DataLoadService();
 
 		while (true) {
-			System.out.println("Select Library to add the member in: 1. MindSpace Reading Corner 2. ReadersVille");
+			System.out.println("Select Library of the member in: 1. MindSpace Reading Corner 2. ReadersVille");
 			int selectLibrary = scanner.nextInt();
 
 			if(selectLibrary==1 ) {
@@ -292,7 +327,7 @@ public class Main {
 	
 	public static void getLendingHistory() {
 		Scanner scanner = new Scanner(System.in);
-		System.out.println("Select Library to add the member in: 1. MindSpace Reading Corner 2. ReadersVille");
+		System.out.println("Select Library of the member in: 1. MindSpace Reading Corner 2. ReadersVille");
 		int selectLibrary = scanner.nextInt();
 		DataLoadService dataLoadService = new DataLoadService();
 		Library library = new Library();
@@ -315,6 +350,39 @@ public class Main {
 			    books.forEach(System.out::println);
 			});
 		}
+		
+	}
+	
+	public static void transferBook() {
+		BookTransferService bookTransferService= new BookTransferService();
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Select Library to transfer book from in: 1. MindSpace Reading Corner 2. ReadersVille");
+		int selectLibraryFrom = scanner.nextInt();
+		DataLoadService dataLoadService = new DataLoadService();
+		Library toLibrary = new Library();
+		if(selectLibraryFrom==1 ) {
+			toLibrary = dataLoadService.libraries.stream().filter(l -> l.getLibraryName().equalsIgnoreCase(ApplicationConstants.MINDSPACE_READING_CORNER)).findFirst()
+					.orElse(null);
+		}else if(selectLibraryFrom == 2) {
+			toLibrary = dataLoadService.libraries.stream().filter(l -> l.getLibraryName().equalsIgnoreCase(ApplicationConstants.READERS_VILLE)).findFirst()
+					.orElse(null);
+		}
+		
+		System.out.println("Select Library to transfer book to in: 1. MindSpace Reading Corner 2. ReadersVille");
+		int selectLibraryTo = scanner.nextInt();
+		
+		Library fromLibrary = new Library();
+		if(selectLibraryTo == 1) {
+			fromLibrary = dataLoadService.libraries.stream().filter(l -> l.getLibraryName().equalsIgnoreCase(ApplicationConstants.MINDSPACE_READING_CORNER)).findFirst()
+					.orElse(null);
+		}else if(selectLibraryTo == 2) {
+			fromLibrary = dataLoadService.libraries.stream().filter(l -> l.getLibraryName().equalsIgnoreCase(ApplicationConstants.READERS_VILLE)).findFirst()
+					.orElse(null);
+		}
+		System.out.println("Enter book title");
+		String searchString = scanner.nextLine();
+		Book bookToTransfer = new Book(searchString);
+		bookTransferService.transferBook(toLibrary, fromLibrary, bookToTransfer);
 		
 	}
 
