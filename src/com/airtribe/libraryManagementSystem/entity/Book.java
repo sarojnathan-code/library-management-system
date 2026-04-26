@@ -1,6 +1,10 @@
 package com.airtribe.libraryManagementSystem.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.airtribe.libraryManagementSystem.service.Reservable;
+import com.airtribe.libraryManagementSystem.service.Reserver;
 import com.airtribe.libraryManagementSystem.util.IdGenerator;
 
 public class Book implements Reservable{
@@ -12,6 +16,7 @@ public class Book implements Reservable{
 	private int publicationYear;
 	private boolean available;
 	private Genre genre;
+	private List<Patron> reservers = new ArrayList();
 	
 	
 	/**
@@ -80,7 +85,7 @@ public class Book implements Reservable{
 	public void setAvailable(boolean available) {
 		this.available = available;
 		if(available) {
-			available();
+			notifyObservers("Book is now available");
 		}
 	}
 	
@@ -121,11 +126,7 @@ public class Book implements Reservable{
 	public void setGenre(Genre genre) {
 		this.genre = genre;
 	}
-	@Override
-	public void available() {
-		System.out.println("Book is now available");
-		
-	}
+	
 
 	/**
 	 * @return the bookId
@@ -188,12 +189,27 @@ public class Book implements Reservable{
 		return "Book [bookId=" + bookId + ", title=" + title + ", author=" + author + ", ISBN=" + ISBN
 				+ ", publicationYear=" + publicationYear + ", available=" + available + ", genre=" + genre + "]";
 	}
+
+	@Override
+	public void registerObserver(Reserver observer) {
+		
+		
+	}
+
+	@Override
+	public void removeObserver(Reserver observer) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notifyObservers(String message) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
-	
-	
-	
-	
-	
+
 	
 
 }

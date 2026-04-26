@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.airtribe.libraryManagementSystem.service.Notify;
+import com.airtribe.libraryManagementSystem.service.Reserver;
 import com.airtribe.libraryManagementSystem.service.Reservable;
 import com.airtribe.libraryManagementSystem.util.IdGenerator;
 import com.airtribe.libraryManagementSystem.util.LendingStatus;
 
-public class Patron implements Notify{
+public class Patron implements Reserver{
 	
 	private List<Reservable> subscribers = new ArrayList<>();
 	
@@ -63,26 +63,6 @@ public class Patron implements Notify{
 		this.phoneNumber = phoneNumber;
 	}
 
-
-
-	@Override
-	public void reserve(Reservable s) {
-		subscribers.add(s);
-		
-	}
-
-	@Override
-	public void unreserve(Reservable s) {
-		subscribers.remove(s);
-		
-	}
-
-	@Override
-	public void notifySubscribers() {
-		for (Reservable s : subscribers) {
-            s.available();
-        }
-	}
 
 	/**
 	 * @return the booksBorrowed
@@ -241,6 +221,17 @@ public class Patron implements Notify{
 	public void setBookHistory(Map<LendingStatus, List<Book>> bookHistory) {
 		this.bookHistory = bookHistory;
 	}
+
+
+
+	@Override
+	public void update(String message) {
+		System.out.println("Book is now available");
+		
+	}
+
+
+
 	
 	
 	

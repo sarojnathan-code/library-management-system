@@ -1,6 +1,8 @@
 package com.airtribe.libraryManagementSystem.service;
 
 public interface Reservable {
-
-	void available();
+	
+	void registerObserver(Reserver observer);
+    void removeObserver(Reserver observer);
+    void notifyObservers(String message);
 }

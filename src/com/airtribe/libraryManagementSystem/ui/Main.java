@@ -90,7 +90,8 @@ public class Main {
 		System.out.println("Enter your membershipId");
 		int id = scanner.nextInt();
 		Map<Genre, Long> genreCount = library.getMembers().stream()
-		.filter(m -> m.getMembershipId() == id).findFirst().orElse(null).getBookHistory()..flatMap(List::stream)                 // all books in one stream
+		.filter(m -> m.getMembershipId() == id).findFirst().orElse(null).
+		getBookHistory().values().stream().flatMap(List::stream)                 // all books in one stream
 	    .collect(Collectors.groupingBy(
 	            Book::getGenre, 
 	            Collectors.counting()
