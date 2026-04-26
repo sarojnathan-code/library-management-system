@@ -2,10 +2,12 @@ package com.airtribe.libraryManagementSystem.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.airtribe.libraryManagementSystem.service.Notify;
 import com.airtribe.libraryManagementSystem.service.Reservable;
 import com.airtribe.libraryManagementSystem.util.IdGenerator;
+import com.airtribe.libraryManagementSystem.util.LendingStatus;
 
 public class Patron implements Notify{
 	
@@ -18,7 +20,7 @@ public class Patron implements Notify{
 	private boolean active;
 	private String address;
 	private String phoneNumber;
-	
+	private Map<LendingStatus, List<Book>> bookHistory;
 
 	/**
 	 * @param name
@@ -29,6 +31,10 @@ public class Patron implements Notify{
 	 */
 	public Patron(String name, int age, boolean active, String address, String phoneNumber) {
 		super();
+		List<Book> booksBorrowed = new ArrayList();
+		List<Book> booksReturned = new ArrayList();
+		this.bookHistory.put(LendingStatus.BORROWED, booksBorrowed);
+		this.bookHistory.put(LendingStatus.RETURNED, booksReturned);
 		this.membershipId= IdGenerator.getMembershipId();
 		this.name = name;
 		this.age = age;
@@ -47,6 +53,10 @@ public class Patron implements Notify{
 	 */
 	public Patron(String name, int age, String address, String phoneNumber) {
 		super();
+		List<Book> booksBorrowed = new ArrayList();
+		List<Book> booksReturned = new ArrayList();
+		this.bookHistory.put(LendingStatus.BORROWED, booksBorrowed);
+		this.bookHistory.put(LendingStatus.RETURNED, booksReturned);
 		this.name = name;
 		this.age = age;
 		this.address = address;
@@ -212,6 +222,24 @@ public class Patron implements Notify{
 	 */
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
+	}
+
+
+
+	/**
+	 * @return the bookHistory
+	 */
+	public Map<LendingStatus, List<Book>> getBookHistory() {
+		return bookHistory;
+	}
+
+
+
+	/**
+	 * @param bookHistory the bookHistory to set
+	 */
+	public void setBookHistory(Map<LendingStatus, List<Book>> bookHistory) {
+		this.bookHistory = bookHistory;
 	}
 	
 	

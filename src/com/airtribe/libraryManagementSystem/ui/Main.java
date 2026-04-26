@@ -21,242 +21,304 @@ public class Main {
 		DataLoadService.loadLibraries();
 		try {
 			Scanner scanner = new Scanner(System.in);
-	        boolean running = true;
+			boolean running = true;
 
-	        while (running) {
-	            System.out.println("\n--- Console Menu ---");
-	            
-	        	System.out.println("1. Manage Books");
-	        	System.out.println("2. Manage Patrons");
-	        	System.out.println("3. Borrow /Returns ");
-	        	System.out.println("4. Inventory Management ");
-	        	System.out.println("5. Borrow /Returns ");
-	        	System.out.println("6. Transfer books ");
-	        	System.out.println("7. Reserve books ");
-	        	System.out.println("8. Recommend books ");
-	            System.out.print("Enter your choice: ");
+			while (running) {
+				System.out.println("\n--- Console Menu ---");
 
-	            int choice = scanner.nextInt();
+				System.out.println("1. Manage Books");
+				System.out.println("2. Manage Patrons");
+				System.out.println("3. Borrow /Returns ");
+				System.out.println("4. Lending History ");
+				System.out.println("5. Transfer books ");
+				System.out.println("6. Reserve books ");
+				System.out.println("7. Recommend books ");
+				System.out.print("Enter your choice: ");
 
-	            switch (choice) {
-	            case 1:
-	            	manageBooks();
-	            	break;
-	            case 2:
-	            	manageBooks();
-	            	break;
-	            }
-	        }
-	        
-	        scanner.close();
+				int choice = scanner.nextInt();
+
+				switch (choice) {
+				case 1:
+					manageBooks();
+					break;
+				case 2:
+					manageBooks();
+					break;
+				case 3:
+					borrowOrReturnBook();
+					break;
+				case 4:
+					getLendingHistory();
+					break;
+				}
 			}
-			catch(Exception ex) {
-				ex.printStackTrace();
-			}
+
+			scanner.close();
+		}
+		catch(Exception ex) {
+			ex.printStackTrace();
+		}
 
 	}
-	
+
 	public static void recommendBooks() {
 		Scanner scanner = new Scanner(System.in);
 		BookService bookServive = new BookService();
 		System.out.println("Enter your membershipId");
 		int id = scanner.nextInt();
-		
-		
+
+
 	}
-	
+
 	public static void manageBooks() {
 		Scanner scanner = new Scanner(System.in);
 		DataLoadService dataLoadService = new DataLoadService();
 		Library library = null;
 		LibraryService libraryService  = new LibraryService();
-        while (true) {
-            System.out.println("\n--- Manage Books ---");
-            System.out.println("Select Library to update: 1. MindSpace Reading Corner 2. ReadersVille");
-            int selectLibrary = scanner.nextInt();
-            
-            if(selectLibrary==1 ) {
-            	library = dataLoadService.libraries.stream().filter(l -> l.getLibraryName().equalsIgnoreCase(ApplicationConstants.MINDSPACE_READING_CORNER)).findFirst()
-            	        .orElse(null);
-            }else if(selectLibrary == 2) {
-            	library = dataLoadService.libraries.stream().filter(l -> l.getLibraryName().equalsIgnoreCase(ApplicationConstants.READERS_VILLE)).findFirst()
-            	        .orElse(null);
-            }
-            
-            System.out.println("1. Add Book");
-        	System.out.println("2. Remove Book");
-        	System.out.println("3. Update Book");
-        	System.out.println("4. Return to main menu");
-            System.out.print("Select an option: ");
+		while (true) {
+			System.out.println("\n--- Manage Books ---");
+			System.out.println("Select Library to update: 1. MindSpace Reading Corner 2. ReadersVille");
+			int selectLibrary = scanner.nextInt();
 
-            int choice = scanner.nextInt();
-            switch (choice) {
-            case 1:
-            	System.out.println("Enter book title");
-            	scanner.nextLine();
-            	String bookName = scanner.nextLine();
-            	System.out.println("Enter author");
-            	String author = scanner.nextLine();
-            	System.out.println("Enter ISBN");
-            	String isbn = scanner.nextLine();
-            	System.out.println("Enter publication year");
-            	int publicationYear = scanner.nextInt();
-            	System.out.println("Enter Genre");
-            	String genre = scanner.nextLine();
-            	scanner.nextLine();
-            	Book book = new Book(bookName,author,isbn,publicationYear, Genre.fromString(genre));
-            	libraryService.addBook(library,book);
-            	library.getBooks().toString();
-                break;
-            case 2:
-            	System.out.println("Enter book title");
-            	String searchString = scanner.nextLine();
-            	Book bookToRemove = new Book(searchString);
-            	libraryService.removeBooks(library, bookToRemove);
-            	scanner.nextLine();
-                break;
-            case 3:
-            	System.out.println("Enter book id to update");
-            	int bookIdToUpdate = scanner.nextInt();
-            	System.out.println("Enter book title");
-            	scanner.nextLine();
-            	String bookNameUpdate = scanner.nextLine();
-            	System.out.println("Enter author");
-            	String authorUpdate = scanner.nextLine();
-            	System.out.println("Enter ISBN");
-            	String isbnUpdate = scanner.nextLine();
-            	System.out.println("Enter publication year");
-            	int publicationYearUpdate = scanner.nextInt();
-            	System.out.println("Enter Genre");
-            	String genreUpdate = scanner.nextLine();
-            	System.out.println("Enter availablity");
-            	boolean availability = scanner.nextBoolean();
-            	Book bookToUpdate = new Book(bookNameUpdate,authorUpdate,isbnUpdate,publicationYearUpdate,availability, Genre.fromString(genreUpdate));
-            	
-            	libraryService.updateBook(library, bookIdToUpdate, bookToUpdate);
-            	scanner.nextLine();
-                break;
-            case 4:
-                    return;
-                default:
-                    System.out.println("Invalid option. Try again.");
-            }
-        }
-    }
-	
+			if(selectLibrary==1 ) {
+				library = dataLoadService.libraries.stream().filter(l -> l.getLibraryName().equalsIgnoreCase(ApplicationConstants.MINDSPACE_READING_CORNER)).findFirst()
+						.orElse(null);
+			}else if(selectLibrary == 2) {
+				library = dataLoadService.libraries.stream().filter(l -> l.getLibraryName().equalsIgnoreCase(ApplicationConstants.READERS_VILLE)).findFirst()
+						.orElse(null);
+			}
+
+			System.out.println("1. Add Book");
+			System.out.println("2. Remove Book");
+			System.out.println("3. Update Book");
+			System.out.println("4. Return to main menu");
+			System.out.print("Select an option: ");
+
+			int choice = scanner.nextInt();
+			switch (choice) {
+			case 1:
+				System.out.println("Enter book title");
+				scanner.nextLine();
+				String bookName = scanner.nextLine();
+				System.out.println("Enter author");
+				String author = scanner.nextLine();
+				System.out.println("Enter ISBN");
+				String isbn = scanner.nextLine();
+				System.out.println("Enter publication year");
+				int publicationYear = scanner.nextInt();
+				System.out.println("Enter Genre");
+				String genre = scanner.nextLine();
+				scanner.nextLine();
+				Book book = new Book(bookName,author,isbn,publicationYear, Genre.fromString(genre));
+				libraryService.addBook(library,book);
+				library.getBooks().toString();
+				break;
+			case 2:
+				System.out.println("Enter book title");
+				String searchString = scanner.nextLine();
+				Book bookToRemove = new Book(searchString);
+				libraryService.removeBooks(library, bookToRemove);
+				scanner.nextLine();
+				break;
+			case 3:
+				System.out.println("Enter book id to update");
+				int bookIdToUpdate = scanner.nextInt();
+				System.out.println("Enter book title");
+				scanner.nextLine();
+				String bookNameUpdate = scanner.nextLine();
+				System.out.println("Enter author");
+				String authorUpdate = scanner.nextLine();
+				System.out.println("Enter ISBN");
+				String isbnUpdate = scanner.nextLine();
+				System.out.println("Enter publication year");
+				int publicationYearUpdate = scanner.nextInt();
+				System.out.println("Enter Genre");
+				String genreUpdate = scanner.nextLine();
+				System.out.println("Enter availablity");
+				boolean availability = scanner.nextBoolean();
+				Book bookToUpdate = new Book(bookNameUpdate,authorUpdate,isbnUpdate,publicationYearUpdate,availability, Genre.fromString(genreUpdate));
+
+				libraryService.updateBook(library, bookIdToUpdate, bookToUpdate);
+				scanner.nextLine();
+				break;
+			case 4:
+				return;
+			default:
+				System.out.println("Invalid option. Try again.");
+			}
+		}
+	}
+
 	public static void managPatrons() {
 		Scanner scanner = new Scanner(System.in);
 		DataLoadService dataLoadService = new DataLoadService();
 		Library library = null;
 		LibraryService libraryService  = new LibraryService();
-        while (true) {
-            System.out.println("\n--- Manage Patrons ---");
-            
-            System.out.println("1. Add Patron");
-        	System.out.println("2. Update Patron");
-        	System.out.println("3. Check Patron borrowing history");
-        	System.out.println("4. Return to main menu");
-            System.out.print("Select an option: ");
+		while (true) {
+			System.out.println("\n--- Manage Patrons ---");
 
-            int choice = scanner.nextInt();
-            switch (choice) {
-            case 1:
-            	System.out.println("Enter name");
-            	scanner.nextLine();
-            	String patronName = scanner.nextLine();
-            	System.out.println("Enter age");
-            	int patronAge = scanner.nextInt();
-            	System.out.println("Enter address");
-            	String patronAddress = scanner.nextLine();
-            	System.out.println("Enter phone number");
-            	String patronPhoneNumber = scanner.nextLine();
-            	scanner.nextLine();
-            	 System.out.println("Select Library to add the member in: 1. MindSpace Reading Corner 2. ReadersVille");
-                 int selectLibrary = scanner.nextInt();
-                 
-                 if(selectLibrary==1 ) {
-                 	library = dataLoadService.libraries.stream().filter(l -> l.getLibraryName().equalsIgnoreCase(ApplicationConstants.MINDSPACE_READING_CORNER)).findFirst()
-                 	        .orElse(null);
-                 }else if(selectLibrary == 2) {
-                 	library = dataLoadService.libraries.stream().filter(l -> l.getLibraryName().equalsIgnoreCase(ApplicationConstants.READERS_VILLE)).findFirst()
-                 	        .orElse(null);
-                 }
-                 
-                 Patron newPatron = new Patron(patronName,patronAge,patronAddress,patronPhoneNumber);
-                 libraryService.addMember(library, newPatron);
-                break;
-            case 2:
-            	System.out.println("Enter membershipId");
-            	int membershipId = scanner.nextInt();
-            	System.out.println("Enter name");
-            	scanner.nextLine();
-            	String patronNameUpdate = scanner.nextLine();
-            	System.out.println("Enter age");
-            	int patronAgeUpdate = scanner.nextInt();
-            	System.out.println("Enter address");
-            	String patronAddressUpdate = scanner.nextLine();
-            	System.out.println("Enter phone number");
-            	String patronPhoneNumberUpdate = scanner.nextLine();
-            	System.out.println("Enter status");
-            	boolean patronStatusUpdate = scanner.nextBoolean();
-            	Patron updatePatron = new Patron(patronNameUpdate,patronAgeUpdate,patronStatusUpdate,patronAddressUpdate,patronPhoneNumberUpdate);
-            	libraryService.updateMember(library, membershipId, updatePatron);
-                break;
-            case 3:
-            	System.out.println("Enter membershipId");
-            	int borrowingHistoryMember = scanner.nextInt();
-            	library.getMembers().stream()
-                .filter(m -> m.getMembershipId() == borrowingHistoryMember)
-                .findFirst()
-                .ifPresent(member -> 
-                    member.getBooksBorrowed()
-                          .forEach(book -> System.out.println(book))
-                );
-                break;
-            case 4:
-                    return;
-                default:
-                    System.out.println("Invalid option. Try again.");
-            }
-        }
-    }
-	
-	public static void borrowBook() {
+			System.out.println("1. Add Patron");
+			System.out.println("2. Update Patron");
+			System.out.println("3. Check Patron borrowing history");
+			System.out.println("4. Return to main menu");
+			System.out.print("Select an option: ");
+
+			int choice = scanner.nextInt();
+			switch (choice) {
+			case 1:
+				System.out.println("Enter name");
+				scanner.nextLine();
+				String patronName = scanner.nextLine();
+				System.out.println("Enter age");
+				int patronAge = scanner.nextInt();
+				System.out.println("Enter address");
+				String patronAddress = scanner.nextLine();
+				System.out.println("Enter phone number");
+				String patronPhoneNumber = scanner.nextLine();
+				scanner.nextLine();
+				System.out.println("Select Library to add the member in: 1. MindSpace Reading Corner 2. ReadersVille");
+				int selectLibrary = scanner.nextInt();
+
+				if(selectLibrary==1 ) {
+					library = dataLoadService.libraries.stream().filter(l -> l.getLibraryName().equalsIgnoreCase(ApplicationConstants.MINDSPACE_READING_CORNER)).findFirst()
+							.orElse(null);
+				}else if(selectLibrary == 2) {
+					library = dataLoadService.libraries.stream().filter(l -> l.getLibraryName().equalsIgnoreCase(ApplicationConstants.READERS_VILLE)).findFirst()
+							.orElse(null);
+				}
+
+				Patron newPatron = new Patron(patronName,patronAge,patronAddress,patronPhoneNumber);
+				libraryService.addMember(library, newPatron);
+				break;
+			case 2:
+				System.out.println("Enter membershipId");
+				int membershipId = scanner.nextInt();
+				System.out.println("Enter name");
+				scanner.nextLine();
+				String patronNameUpdate = scanner.nextLine();
+				System.out.println("Enter age");
+				int patronAgeUpdate = scanner.nextInt();
+				System.out.println("Enter address");
+				String patronAddressUpdate = scanner.nextLine();
+				System.out.println("Enter phone number");
+				String patronPhoneNumberUpdate = scanner.nextLine();
+				System.out.println("Enter status");
+				boolean patronStatusUpdate = scanner.nextBoolean();
+				Patron updatePatron = new Patron(patronNameUpdate,patronAgeUpdate,patronStatusUpdate,patronAddressUpdate,patronPhoneNumberUpdate);
+				libraryService.updateMember(library, membershipId, updatePatron);
+				break;
+			case 3:
+				System.out.println("Enter membershipId");
+				int borrowingHistoryMember = scanner.nextInt();
+				library.getMembers().stream()
+				.filter(m -> m.getMembershipId() == borrowingHistoryMember)
+				.findFirst()
+				.ifPresent(member -> 
+				member.getBooksBorrowed()
+				.forEach(book -> System.out.println(book))
+						);
+				break;
+			case 4:
+				return;
+			default:
+				System.out.println("Invalid option. Try again.");
+			}
+		}
+	}
+
+	public static void borrowOrReturnBook() {
 		Scanner scanner = new Scanner(System.in);
 		Library library = new Library();
 		DataLoadService dataLoadService = new DataLoadService();
+
+		while (true) {
+			System.out.println("Select Library to add the member in: 1. MindSpace Reading Corner 2. ReadersVille");
+			int selectLibrary = scanner.nextInt();
+
+			if(selectLibrary==1 ) {
+				library = dataLoadService.libraries.stream().filter(l -> l.getLibraryName().equalsIgnoreCase(ApplicationConstants.MINDSPACE_READING_CORNER)).findFirst()
+						.orElse(null);
+			}else if(selectLibrary == 2) {
+				library = dataLoadService.libraries.stream().filter(l -> l.getLibraryName().equalsIgnoreCase(ApplicationConstants.READERS_VILLE)).findFirst()
+						.orElse(null);
+			}
+
+			System.out.println("Enter membershipId");
+			int membershipId = scanner.nextInt();
+			Patron patron = library.getMembers().stream().filter(m -> m.getMembershipId() == membershipId).findFirst().orElse(null);
+			System.out.println("Enter book title");
+			String bookName = scanner.nextLine();
+			LendingService lendingService = new LendingService();
+
+			BookService bookService = new BookService();
+			Book searchBook = bookService.searchBook(new Book(bookName));
+			if(patron==null) {
+				System.err.println("Invalid membership id");
+				return;
+			}
+
+			System.out.println("\n--- Borrow or Return Book ---");
+
+			System.out.println("1. Borrow book");
+			System.out.println("2. Return book");
+			System.out.println("3. Return to main menu");
+			System.out.print("Select an option: ");
+
+
+			int choice = scanner.nextInt();
+			switch (choice) {
+			case 1:
+
+				if(searchBook == null) {
+					System.err.println("This book is not available at the moment");
+					return;
+				}else {
+					lendingService.lendBook(patron,searchBook);
+				}
+
+				break;
+			case 2:
+				if(searchBook == null) {
+					System.err.println("This book is not available at the moment");
+					return;
+				}else {
+					lendingService.returnBook(patron, searchBook);
+				}
+
+
+			}
+		}
+	}
+	
+	public static void getLendingHistory() {
+		Scanner scanner = new Scanner(System.in);
 		System.out.println("Select Library to add the member in: 1. MindSpace Reading Corner 2. ReadersVille");
-        int selectLibrary = scanner.nextInt();
-        
-        if(selectLibrary==1 ) {
-        	library = dataLoadService.libraries.stream().filter(l -> l.getLibraryName().equalsIgnoreCase(ApplicationConstants.MINDSPACE_READING_CORNER)).findFirst()
-        	        .orElse(null);
-        }else if(selectLibrary == 2) {
-        	library = dataLoadService.libraries.stream().filter(l -> l.getLibraryName().equalsIgnoreCase(ApplicationConstants.READERS_VILLE)).findFirst()
-        	        .orElse(null);
-        }
-        
+		int selectLibrary = scanner.nextInt();
+		DataLoadService dataLoadService = new DataLoadService();
+		Library library = new Library();
+		if(selectLibrary==1 ) {
+			library = dataLoadService.libraries.stream().filter(l -> l.getLibraryName().equalsIgnoreCase(ApplicationConstants.MINDSPACE_READING_CORNER)).findFirst()
+					.orElse(null);
+		}else if(selectLibrary == 2) {
+			library = dataLoadService.libraries.stream().filter(l -> l.getLibraryName().equalsIgnoreCase(ApplicationConstants.READERS_VILLE)).findFirst()
+					.orElse(null);
+		}
 		System.out.println("Enter membershipId");
 		int membershipId = scanner.nextInt();
 		Patron patron = library.getMembers().stream().filter(m -> m.getMembershipId() == membershipId).findFirst().orElse(null);
-		System.out.println("Enter book title");
-		String bookName = scanner.nextLine();
-		LendingService lendingService = new LendingService();
-		
-		BookService bookService = new BookService();
-		Book searchBook = bookService.searchBook(new Book(bookName));
 		if(patron==null) {
 			System.err.println("Invalid membership id");
 			return;
-		}
-		if(searchBook == null) {
-			System.err.println("This book is not available at the moment");
-			return;
 		}else {
-			lendingService.lendBook(patron,searchBook);
+			patron.getBookHistory().forEach((status, books) -> {
+			    System.out.println("Status: " + status);
+			    books.forEach(System.out::println);
+			});
 		}
 		
 	}
-	
 
-}
+
+	}
+
+
