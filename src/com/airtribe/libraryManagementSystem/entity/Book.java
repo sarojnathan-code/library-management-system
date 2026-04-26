@@ -1,16 +1,73 @@
 package com.airtribe.libraryManagementSystem.entity;
 
 import com.airtribe.libraryManagementSystem.service.Reservable;
+import com.airtribe.libraryManagementSystem.util.IdGenerator;
 
 public class Book implements Reservable{
 	
 	private int bookId;
 	private String title;
 	private String author;
-	private int ISBN;
+	private String ISBN;
 	private int publicationYear;
 	private boolean available;
 	private Genre genre;
+	
+	
+	/**
+	 * @param bookId
+	 * @param title
+	 * @param author
+	 * @param iSBN
+	 * @param publicationYear
+	 * @param available
+	 * @param genre
+	 */
+	public Book(String title, String author, String iSBN, int publicationYear, boolean available,
+			Genre genre) {
+		super();
+		this.bookId = IdGenerator.getNextBookId();
+		this.title = title;
+		this.author = author;
+		ISBN = iSBN;
+		this.publicationYear = publicationYear;
+		this.available = available;
+		this.genre = genre;
+	}
+	
+	public Book(String title, String author, String iSBN, int publicationYear,
+			Genre genre) {
+		super();
+		this.bookId = IdGenerator.getNextBookId();
+		this.title = title;
+		this.author = author;
+		ISBN = iSBN;
+		this.publicationYear = publicationYear;
+		this.available = true;
+		this.genre = genre;
+	}
+	
+	
+	
+	/**
+	 * @param title
+	 */
+	public Book(String title) {
+		super();
+		this.title = title;
+		this.available = true;
+	}
+	
+	
+
+	/**
+	 * @param bookId
+	 */
+	public Book(int bookId) {
+		super();
+		this.bookId = bookId;
+	}
+
 	/**
 	 * @return the available
 	 */
@@ -69,6 +126,72 @@ public class Book implements Reservable{
 		System.out.println("Book is now available");
 		
 	}
+
+	/**
+	 * @return the bookId
+	 */
+	public int getBookId() {
+		return bookId;
+	}
+
+	/**
+	 * @param bookId the bookId to set
+	 */
+	public void setBookId(int bookId) {
+		this.bookId = bookId;
+	}
+
+	/**
+	 * @return the author
+	 */
+	public String getAuthor() {
+		return author;
+	}
+
+	/**
+	 * @param author the author to set
+	 */
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
+	/**
+	 * @return the iSBN
+	 */
+	public String getISBN() {
+		return ISBN;
+	}
+
+	/**
+	 * @param iSBN the iSBN to set
+	 */
+	public void setISBN(String iSBN) {
+		ISBN = iSBN;
+	}
+
+	/**
+	 * @return the publicationYear
+	 */
+	public int getPublicationYear() {
+		return publicationYear;
+	}
+
+	/**
+	 * @param publicationYear the publicationYear to set
+	 */
+	public void setPublicationYear(int publicationYear) {
+		this.publicationYear = publicationYear;
+	}
+
+	@Override
+	public String toString() {
+		return "Book [bookId=" + bookId + ", title=" + title + ", author=" + author + ", ISBN=" + ISBN
+				+ ", publicationYear=" + publicationYear + ", available=" + available + ", genre=" + genre + "]";
+	}
+	
+	
+	
+	
 	
 	
 	

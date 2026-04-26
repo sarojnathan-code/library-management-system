@@ -1,25 +1,14 @@
 package com.airtribe.libraryManagementSystem.service;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import com.airtribe.libraryManagementSystem.entity.Book;
-import com.airtribe.libraryManagementSystem.entity.Genre;
 
 public class BookService {
 	
-	private List<Book> books;
-	
-	private Map<Genre, List<Book>> booksByGenre;
-	
-	public void groupBooksByGnere(){
-		booksByGenre=  books.stream()
-		        .collect(Collectors.groupingBy(Book::getGenre));
-	}
+	private List<Book> books = DataLoadService.books;
 	
 	public void addBook(Book book) {
 		books.add(book);

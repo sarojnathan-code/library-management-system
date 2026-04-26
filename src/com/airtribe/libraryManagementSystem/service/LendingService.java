@@ -5,13 +5,13 @@ import com.airtribe.libraryManagementSystem.entity.Patron;
 
 public class LendingService {
 	
-	private void lendBook(Patron patron,Book book) {
-		patron.getBooks().add(book);
+	public void lendBook(Patron patron,Book book) {
+		patron.getBooksBorrowed().add(book);
 		book.setAvailable(false);
 	}
 	
-	private void returnBook(Patron patron,Book book) {
-		patron.getBooks().remove(book);
+	public void returnBook(Patron patron,Book book) {
+		patron.getBooksBorrowed().remove(book);
 		book.setAvailable(true);
 	}
 
